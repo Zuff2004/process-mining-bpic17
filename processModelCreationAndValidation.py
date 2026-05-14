@@ -225,13 +225,13 @@ except Exception as e:
 
 
 # =========================================
-# 6. FILTER LOG TO APROX. 80% OF THE CASES
+# 6. FILTER LOG TO APROX. 15% OF THE CASES
 # =========================================
 
 # Main Idea: Instead of modeling every rare variant, I thought of keeping the most frequent variants up to the point that it reaches around 80% of all cases
 # Create the model through that would enable a controlled fitness + avoiding including rare cases leading to more precise and generic models (trade-off)
 
-# GOAL: Keep the most frequent variants until they cover app 80% of the cases --> REDUCING NOISE
+# GOAL: Keep the most frequent variants until they cover app 15% of the cases --> REDUCING NOISE
 
 # 6.1: Variant sequence per case + frequency
 try:
@@ -256,18 +256,18 @@ except Exception as e:
     print(e)
     sys.exit()
 
-# 6.3: Keep variants for around 80% of all cases 
+# 6.3: Keep variants for around 15% of all cases 
 try:
-    selected_variants = variant_counts[variant_counts["cumultative_percentage"] <= 0.80]["variant"]
+    selected_variants = variant_counts[variant_counts["cumultative_percentage"] <= 0.15]["variant"]
 
-    # Safety --> include first variant above 80% if necessary!! (avoid being significantly less than 80%)
+    # Safety --> include first variant above 15% if necessary!! (avoid being significantly less than 80%)
     if len(selected_variants) < len(variant_counts):
         selected_variants = variant_counts.iloc[:len(selected_variants) + 1]["variant"]
     
-    print("Computed all cases up to around 0.80 of the frequency of the log")
+    print("Computed all cases up to around 0.15 of the frequency of the log")
 
 except Exception as e:
-    print("Unable to compute 0.80 of all cases")
+    print("Unable to compute 0.15 of all cases")
     print(e)
     sys.exit()
 
@@ -275,7 +275,7 @@ except Exception as e:
 try:
     selected_cases = variants_per_case[variants_per_case["variant"].isin(selected_variants)]["caseID"]
     filtered_log = log[log["case:concept:name"].isin(selected_cases)]
-    print("Log filtered for around 80 percent of all the cases")
+    print("Log filtered for around 15 percent of all the cases")
 except Exception as e:
     print("Unable to filter the log")
     print(e)
@@ -298,7 +298,7 @@ except Exception as e:
 
 # SAVING THE FINAL PROCESS
 try:
-    pm4py.save_vis_petri_net(net_final, im_final, fm_final, "../output/models/final_model_filtered_80.png")
+    pm4py.save_vis_petri_net(net_final, im_final, fm_final, "../output/models/final_model_filtered_15.png")
     print("Final model exported")
 except Exception as e:
     print("Unable to export final model")
