@@ -228,7 +228,7 @@ except Exception as e:
 # 6. FILTER LOG TO APROX. 15% OF THE CASES
 # =========================================
 
-# Main Idea: Instead of modeling every rare variant, I thought of keeping the most frequent variants up to the point that it reaches around 80% of all cases
+# Main Idea: Instead of modeling every rare variant, I thought of keeping the most frequent variants up to the point that it reaches around 15% of all cases
 # Create the model through that would enable a controlled fitness + avoiding including rare cases leading to more precise and generic models (trade-off)
 
 # GOAL: Keep the most frequent variants until they cover app 15% of the cases --> REDUCING NOISE
@@ -260,7 +260,7 @@ except Exception as e:
 try:
     selected_variants = variant_counts[variant_counts["cumultative_percentage"] <= 0.15]["variant"]
 
-    # Safety --> include first variant above 15% if necessary!! (avoid being significantly less than 80%)
+    # Safety --> include first variant above 15% if necessary!! (avoid being significantly less than 15%)
     if len(selected_variants) < len(variant_counts):
         selected_variants = variant_counts.iloc[:len(selected_variants) + 1]["variant"]
     
